@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>META.js Customizer</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="theme-toggle">
+      <button id="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+
+    <div class="container">
+      <header class="header">
+        <h1><i class="fas fa-cogs"></i> META.js Customizer</h1>
+        <p class="subtitle">
+          Create your custom META.js of
+          <a href="https://github.com/xixu-me/META" target="_blank">
+            <i class="fab fa-github"></i> xixu-me/META</a
+          >
+          with service rulesets from
+          <a href="https://github.com/xixu-me/RFM" target="_blank">
+            <i class="fab fa-github"></i> xixu-me/RFM</a
+          >
+        </p>
+      </header>
+
+      <div id="services-container" class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-list"></i> Services</h2>
+        </div>
+        <div class="card-content">
+          <div class="services-controls">
+            <div class="search-container">
+              <div class="search-input-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="Search and add services..."
+                />
+              </div>
+              <div class="services-count">
+                <i class="fas fa-check-circle"></i>
+                <span id="selected-count">0 selected</span>
+              </div>
+            </div>
+            <div id="search-results" class="search-results"></div>
+          </div>
+          <div id="selected-services">
+            <div class="no-services">
+              <i class="fas fa-inbox"></i>
+              <p>No services selected</p>
+              <small>Search for services above to get started</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="output-container" class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-code"></i> Generated META.js</h2>
+        </div>
+        <div class="card-content">
+          <div class="output-actions">
+            <button id="copyButton" class="btn btn-primary">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+            <button id="downloadButton" class="btn btn-secondary">
+              <i class="fas fa-download"></i> Download
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-banner card">
+        <div class="card-header">
+          <h2><i class="fas fa-info-circle"></i> Icon Configuration Guide</h2>
+        </div>
+        <div class="card-content">
+          <div class="info-content">
+            <p>
+              Service icons are sourced from
+              <a href="https://github.com/xixu-me/favicons" target="_blank">
+                <i class="fab fa-github"></i> xixu-me/favicons</a
+              >. Auto-generated configurations may require manual adjustments
+              based on availability.
+            </p>
+
+            <h3><i class="fas fa-cog"></i> Configuration Rules</h3>
+            <ul>
+              <li>
+                <strong>Icon unavailable:</strong> Uses specific
+                <code>domain</code>
+                <span class="example"
+                  >(e.g., "xiaohongshu.com" for rednote)</span
+                >
+              </li>
+              <li>
+                <strong>Name matches SLD:</strong> Uses only <code>tld</code>
+                <span class="example"
+                  >(e.g., "github" → <code>tld: "com"</code>)</span
+                >
+              </li>
+              <li>
+                <strong>Name does not match SLD:</strong> Adds <code>sld</code>
+                <span class="example"
+                  >(e.g., "xai" → <code>sld: "x", tld: "ai"</code>)</span
+                >
+              </li>
+            </ul>
+
+            <div class="tip-box">
+              <i class="fas fa-lightbulb"></i>
+              <strong>Pro Tip:</strong> Browse the
+              <a
+                href="https://github.com/xixu-me/favicons/tree/assets"
+                target="_blank"
+              >
+                assets branch</a
+              >
+              to verify icon availability before finalizing your configuration.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>
+          <i class="fas fa-code-branch"></i>
+          This web app is open source at
+          <a
+            href="https://github.com/xixu-me/META.js-Customizer"
+            target="_blank"
+            ><i class="fab fa-github"></i> xixu-me/META.js-Customizer</a
+          >
+        </p>
+      </footer>
+    </div>
+    <script src="meta_template.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
