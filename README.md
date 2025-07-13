@@ -10,7 +10,7 @@ META.js Customizer is an intuitive web app that allows users to easily create cu
 - 🎨 **Modern Glass UI**: Beautiful, responsive design with dark/light theme support
 - 🌙 **Intelligent Theming**: Auto-detects system theme with manual override options
 - 📱 **Mobile Responsive**: Works seamlessly on all device sizes
-- 🚀 **Real-time Generation**: Instantly generates META.js configuration as you select services
+- 🚀 **Real-time Generation**: Instantly generates META.js as you select services
 - 📋 **One-click Copy**: Copy generated configuration to clipboard
 - 💾 **Download Support**: Download your configuration as META.js file
 
@@ -51,12 +51,14 @@ Visit [metajs.xi-xu.me](https://metajs.xi-xu.me) to use the customizer directly 
 1. **Search for Services**: Use the search bar to find services you want to include
 2. **Select Services**: Click on search results to add them to your configuration
 3. **Review Selection**: Check your selected services in the main panel
-4. **Generate Configuration**: Your META.js configuration is automatically generated
+4. **Generate Configuration**: Your META.js is automatically generated
 5. **Copy or Download**: Use the action buttons to copy or download your configuration
 
 ### Service Configuration
 
 Service icons are sourced from [xixu-me/favicons](https://github.com/xixu-me/favicons). Auto-generated configurations may require manual adjustments based on availability.
+
+Configuration rules:
 
 - **Icon Unavailable**: Uses specific `domain` for services requiring custom domains
   - Example: `rednote` → `{ name: "rednote", domain: "xiaohongshu.com" }`
@@ -64,7 +66,7 @@ Service icons are sourced from [xixu-me/favicons](https://github.com/xixu-me/fav
 - **Icon Available**: Uses only `tld` when service name matches Second-Level Domain
   - Example: `github` → `{ name: "GitHub", tld: "com" }`
 
-- **Name does not match SLD**: Adds `sld` for services with non-standard naming
+- **Name does not match SLD**: Adds `sld`
   - Example: `xai` → `{ name: "xAI", sld: "x", tld: "ai" }`
 
 ### Theme Options
@@ -81,7 +83,7 @@ Click the theme toggle button to cycle through:
 
 - **Service Fetcher**: Retrieves available services from RFM repository via GitHub API
 - **Search Engine**: Real-time filtering and matching of services
-- **Configuration Generator**: Creates META.js configuration with proper formatting
+- **Configuration Generator**: Creates META.js with proper formatting
 - **Theme Manager**: Handles theme detection, switching, and persistence
 - **UI Controller**: Manages user interactions and visual feedback
 
