@@ -242,18 +242,6 @@ body::before {
   border-radius: 50%;
 }
 
-#theme-toggle[title*="Auto"]:before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 8px;
-  height: 8px;
-  background: var(--primary-color);
-  border-radius: 50%;
-  border: 2px solid var(--bg-primary);
-}
-
 .container {
   max-width: 1000px;
   margin: 0 auto;
