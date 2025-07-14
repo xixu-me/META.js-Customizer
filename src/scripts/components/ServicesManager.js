@@ -21,7 +21,16 @@ export class ServicesManager {
 
     this.allServices = [];
     this.selectedServices = new Set();
+    this.selectedServicesOrder = []; // Track order for drag functionality
     this.searchTimeout = null;
+
+    // Drag state
+    this.dragState = {
+      isDragging: false,
+      draggedElement: null,
+      draggedIndex: -1,
+      placeholder: null,
+    };
 
     this.elements = {
       searchInput: document.getElementById("search-input"),
@@ -115,6 +124,26 @@ export class ServicesManager {
     this.elements.selectedServices.addEventListener("click", (e) => {
       this.handleSelectedServiceClick(e);
     });
+
+    // Handle drag events
+    this.setupDragListeners();
+  }
+
+  /**
+   * Set up drag and drop event listeners
+   */
+  setupDragListeners() {
+    this.elements.selectedServices.addEventListener("mousedown", (e) => {
+      this.handleDragStart(e);
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      this.handleDragMove(e);
+    });
+
+    document.addEventListener("mouseup", (e) => {
+      this.handleDragEnd(e);
+    });
   }
 
   /**
@@ -207,6 +236,7 @@ export class ServicesManager {
   addService(serviceName) {
     if (!this.selectedServices.has(serviceName)) {
       this.selectedServices.add(serviceName);
+      this.selectedServicesOrder.push(serviceName);
       this.updateUI();
       this.clearSearch();
       this.triggerSelectionChange();
@@ -220,6 +250,10 @@ export class ServicesManager {
   removeService(serviceName) {
     if (this.selectedServices.has(serviceName)) {
       this.selectedServices.delete(serviceName);
+      const index = this.selectedServicesOrder.indexOf(serviceName);
+      if (index > -1) {
+        this.selectedServicesOrder.splice(index, 1);
+      }
       this.updateUI();
       this.triggerSelectionChange();
     }
@@ -265,8 +299,8 @@ export class ServicesManager {
       return;
     }
 
-    const selectedArray = Array.from(this.selectedServices).sort();
-    this.elements.selectedServices.innerHTML = selectedArray
+    // Use ordered array instead of sorted Set
+    this.elements.selectedServices.innerHTML = this.selectedServicesOrder
       .map(
         (serviceName, index) => `
         <div class="selected-service-item" data-index="${index}">
@@ -291,7 +325,7 @@ export class ServicesManager {
    * @returns {Array<string>} Array of selected service names
    */
   getSelectedServices() {
-    return Array.from(this.selectedServices);
+    return [...this.selectedServicesOrder];
   }
 
   /**
@@ -310,5 +344,140 @@ export class ServicesManager {
    */
   isLoaded() {
     return this.allServices.length > 0;
+  }
+
+  /**
+   * Handle drag start
+   * @param {MouseEvent} event - Mouse event
+   */
+  handleDragStart(event) {
+    const dragHandle = event.target.closest(".service-drag-handle");
+    if (!dragHandle) return;
+
+    event.preventDefault();
+
+    const serviceItem = dragHandle.closest(".selected-service-item");
+    if (!serviceItem) return;
+
+    this.dragState.isDragging = true;
+    this.dragState.draggedElement = serviceItem;
+    this.dragState.draggedIndex = parseInt(serviceItem.dataset.index);
+
+    // Create placeholder
+    this.dragState.placeholder = document.createElement("div");
+    this.dragState.placeholder.className =
+      "selected-service-item drag-placeholder";
+    this.dragState.placeholder.innerHTML = `
+      <div class="service-info">
+        <i class="fas fa-grip-lines service-drag-handle"></i>
+        <span class="service-name">Drop here</span>
+      </div>
+    `;
+
+    // Add dragging class
+    serviceItem.classList.add("dragging");
+    document.body.classList.add("dragging");
+
+    // Insert placeholder
+    serviceItem.parentNode.insertBefore(
+      this.dragState.placeholder,
+      serviceItem.nextSibling
+    );
+  }
+
+  /**
+   * Handle drag move
+   * @param {MouseEvent} event - Mouse event
+   */
+  handleDragMove(event) {
+    if (!this.dragState.isDragging) return;
+
+    const serviceItems = Array.from(
+      this.elements.selectedServices.querySelectorAll(
+        ".selected-service-item:not(.dragging):not(.drag-placeholder)"
+      )
+    );
+
+    let targetIndex = serviceItems.length; // Default to end
+
+    for (let i = 0; i < serviceItems.length; i++) {
+      const item = serviceItems[i];
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+
+      if (event.clientY < itemCenter) {
+        targetIndex = i;
+        break;
+      }
+    }
+
+    // Move placeholder to new position
+    const targetItem = serviceItems[targetIndex];
+    if (targetItem) {
+      targetItem.parentNode.insertBefore(
+        this.dragState.placeholder,
+        targetItem
+      );
+    } else {
+      // Insert at end
+      this.elements.selectedServices.appendChild(this.dragState.placeholder);
+    }
+  }
+
+  /**
+   * Handle drag end
+   * @param {MouseEvent} event - Mouse event
+   */
+  handleDragEnd(event) {
+    if (!this.dragState.isDragging) return;
+
+    // Calculate new index based on placeholder position
+    const allItems = Array.from(
+      this.elements.selectedServices.querySelectorAll(
+        ".selected-service-item, .drag-placeholder"
+      )
+    );
+    const placeholderIndex = allItems.indexOf(this.dragState.placeholder);
+    const newIndex =
+      placeholderIndex > this.dragState.draggedIndex
+        ? placeholderIndex - 1
+        : placeholderIndex;
+
+    // Update services order
+    this.reorderServices(this.dragState.draggedIndex, newIndex);
+
+    // Clean up
+    this.dragState.draggedElement.classList.remove("dragging");
+    document.body.classList.remove("dragging");
+    if (this.dragState.placeholder && this.dragState.placeholder.parentNode) {
+      this.dragState.placeholder.parentNode.removeChild(
+        this.dragState.placeholder
+      );
+    }
+
+    // Reset drag state
+    this.dragState = {
+      isDragging: false,
+      draggedElement: null,
+      draggedIndex: -1,
+      placeholder: null,
+    };
+
+    // Update UI and trigger change event
+    this.renderSelectedServices();
+    this.triggerSelectionChange();
+  }
+
+  /**
+   * Reorder services array
+   * @param {number} fromIndex - Original index
+   * @param {number} toIndex - Target index
+   */
+  reorderServices(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+
+    const item = this.selectedServicesOrder[fromIndex];
+    this.selectedServicesOrder.splice(fromIndex, 1);
+    this.selectedServicesOrder.splice(toIndex, 0, item);
   }
 }

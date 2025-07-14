@@ -1574,5 +1574,60 @@ body::before {
 }
 
 /* ==========================================================================
-   Global Styles
+   Drag and drop styles
    ========================================================================== */
+.dragging .selected-service-item {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.drag-placeholder {
+  border: 2px dashed var(--primary-color) !important;
+  background: rgba(37, 99, 235, 0.1) !important;
+  opacity: 0.7;
+}
+
+.drag-placeholder .service-name {
+  color: var(--primary-color) !important;
+  font-style: italic;
+}
+
+body.dragging {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+body.dragging * {
+  cursor: grabbing !important;
+}
+
+.service-drag-handle {
+  cursor: grab;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.service-drag-handle:hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+
+.service-drag-handle:active {
+  cursor: grabbing;
+}
+
+.selected-service-item.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  transition: none;
+  z-index: 1000;
+  position: relative;
+}
+
+/* Dark theme drag styles */
+[data-theme="dark"] .drag-placeholder {
+  border-color: var(--primary-color) !important;
+  background: rgba(37, 99, 235, 0.15) !important;
+}
