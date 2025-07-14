@@ -1,3 +1,14 @@
+/**
+ * META.js Customizer - Main Stylesheet
+ * Modern, accessible, and maintainable styles with BEM methodology
+ * Author: xixu-me
+ * License: GPL-3.0
+ */
+
+/* ==========================================================================
+   CSS Custom Properties (Design System)
+   ========================================================================== */
+
 /* CSS Variables for theming */
 :root {
   --primary-color: #2563eb;

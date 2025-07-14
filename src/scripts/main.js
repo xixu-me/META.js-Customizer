@@ -1,3 +1,14 @@
+/**
+ * META.js Customizer - Main Application Script
+ *
+ * A modern, accessible web application for generating custom META.js configurations
+ * using service rulesets from the xixu-me/RFM repository.
+ *
+ * @author xixu-me
+ * @license GPL-3.0
+ * @version 2.0.0
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search-input");
   const searchResults = document.getElementById("search-results");
