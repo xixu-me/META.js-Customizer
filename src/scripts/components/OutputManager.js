@@ -16,7 +16,7 @@ export class OutputManager {
   constructor(serviceConfigGenerator) {
     this.serviceConfigGenerator = serviceConfigGenerator;
     this.templateCache = null;
-    this.currentOutput = ""; // Store the current generated output
+    this.currentOutput = "";
 
     this.elements = {
       copyButton: document.getElementById("copyButton"),
@@ -34,6 +34,10 @@ export class OutputManager {
     this.setupEventListeners();
     this.loadTemplate();
     this.setupServiceChangeListener();
+
+    // Initialize with empty output to show "No configuration generated" message
+    this.updateOutput("");
+    this.setButtonsState(false);
   }
 
   /**
@@ -80,7 +84,6 @@ export class OutputManager {
    */
   async handleServicesChanged(services) {
     if (services.length === 0) {
-      this.currentOutput = "";
       this.updateOutput("");
       this.setButtonsState(false);
     } else {
@@ -88,7 +91,6 @@ export class OutputManager {
 
       try {
         const output = await this.generateOutput(services);
-        this.currentOutput = output;
         this.updateOutput(output);
         this.setButtonsState(true);
       } catch (error) {
@@ -141,12 +143,18 @@ export class OutputManager {
         .appendChild(outputDisplay);
     }
 
+    // Store the output for copy/download functionality without displaying it
+    this.currentOutput = output;
+
     if (output.trim()) {
-      // Hide the output display when there's generated content
-      outputDisplay.style.display = "none";
+      outputDisplay.innerHTML = `
+        <div class="no-output">
+          <i class="fas fa-check-circle"></i>
+          <h3>META.js Generated Successfully</h3>
+          <p>Use the buttons above to copy or download your META.js</p>
+        </div>
+      `;
     } else {
-      // Show the no-output message when there's no content
-      outputDisplay.style.display = "block";
       outputDisplay.innerHTML = `
         <div class="no-output">
           <i class="fas fa-code"></i>

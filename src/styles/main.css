@@ -518,6 +518,60 @@ body::before {
   color: white !important;
 }
 
+/* Disabled button styles */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  background: rgba(156, 163, 175, 0.3) !important;
+  color: rgba(156, 163, 175, 0.7) !important;
+  border: 1px solid rgba(156, 163, 175, 0.2) !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+.btn:disabled::before {
+  display: none;
+}
+
+.btn:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Specific disabled styles for primary buttons */
+.btn-primary:disabled {
+  background: rgba(156, 163, 175, 0.3) !important;
+  color: rgba(156, 163, 175, 0.7) !important;
+  border-color: rgba(156, 163, 175, 0.2) !important;
+}
+
+/* Specific disabled styles for secondary buttons */
+.btn-secondary:disabled {
+  background: rgba(156, 163, 175, 0.15) !important;
+  color: rgba(156, 163, 175, 0.6) !important;
+  border-color: rgba(156, 163, 175, 0.2) !important;
+}
+
+/* Dark theme disabled button styles */
+[data-theme="dark"] .btn:disabled {
+  background: rgba(75, 85, 99, 0.3) !important;
+  color: rgba(107, 114, 128, 0.7) !important;
+  border-color: rgba(75, 85, 99, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-primary:disabled {
+  background: rgba(75, 85, 99, 0.3) !important;
+  color: rgba(107, 114, 128, 0.7) !important;
+  border-color: rgba(75, 85, 99, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-secondary:disabled {
+  background: rgba(75, 85, 99, 0.2) !important;
+  color: rgba(107, 114, 128, 0.6) !important;
+  border-color: rgba(75, 85, 99, 0.3) !important;
+}
+
 /* Footer */
 .footer {
   margin-top: 2rem;
