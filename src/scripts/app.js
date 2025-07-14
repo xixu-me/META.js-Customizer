@@ -1,5 +1,5 @@
 /**
- * META.js Customizer - Main Application Controller
+ * META.js Customizer - Main App Controller
  *
  * Modern, accessible web app for generating custom META.js
  * using service rulesets from the xixu-me/RFM repository.
@@ -30,7 +30,7 @@ export class MetaJSCustomizer {
   }
 
   /**
-   * Initialize the application
+   * Initialize the app
    */
   async init() {
     try {
@@ -56,7 +56,7 @@ export class MetaJSCustomizer {
   }
 
   /**
-   * Initialize all application components
+   * Initialize all app components
    */
   async initializeComponents() {
     // Initialize theme manager first (no dependencies)
@@ -142,7 +142,7 @@ export class MetaJSCustomizer {
   }
 
   /**
-   * Show application loading state
+   * Show app loading state
    */
   showLoadingState() {
     const container = document.querySelector(".container");
@@ -165,7 +165,7 @@ export class MetaJSCustomizer {
   }
 
   /**
-   * Hide application loading state
+   * Hide app loading state
    */
   hideLoadingState() {
     const container = document.querySelector(".container");
@@ -250,7 +250,7 @@ export class MetaJSCustomizer {
   }
 
   /**
-   * Check if application is ready
+   * Check if app is ready
    * @returns {boolean} True if initialized
    */
   isReady() {
@@ -258,7 +258,7 @@ export class MetaJSCustomizer {
   }
 
   /**
-   * Destroy application and cleanup
+   * Destroy app and cleanup
    */
   destroy() {
     // Cleanup components if they have destroy methods
@@ -273,7 +273,7 @@ export class MetaJSCustomizer {
   }
 }
 
-// Initialize application when DOM is ready
+// Initialize app when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   // Make app instance globally available for debugging
   window.metaJSCustomizer = new MetaJSCustomizer();

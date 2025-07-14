@@ -123,7 +123,7 @@ The META.js Customizer follows a modern, modular architecture designed for maint
 
 #### **🎯 MetaJSCustomizer (Main Controller)**
 
-- Application lifecycle management and component orchestration
+- App lifecycle management and component orchestration
 - Global error handling with user-friendly feedback
 - Performance monitoring and optimization
 - Loading state management and initialization coordination
