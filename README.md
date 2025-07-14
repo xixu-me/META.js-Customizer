@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-META.js Customizer is a modern, intuitive web app that allows users to easily create custom META.js configurations for [xixu-me/META](https://github.com/xixu-me/META). It provides a beautiful visual interface to select and configure service rulesets from the [xixu-me/RFM](https://github.com/xixu-me/RFM) repository.
+META.js Customizer is a modern, intuitive web app that allows users to easily create custom META.js of [xixu-me/META](https://github.com/xixu-me/META). It provides a beautiful visual interface to select and configure service rulesets from the [xixu-me/RFM](https://github.com/xixu-me/RFM) repository.
 
 ### ✨ Key Features
 
@@ -89,47 +89,72 @@ The app automatically detects system theme changes and applies them when in auto
 
 ## 🏗️ Architecture
 
-### Key Components
+The META.js Customizer follows a modern, modular architecture designed for maintainability, scalability, and performance:
 
-#### 🎨 **ThemeManager**
+### 🧩 Component-Based Design
 
-- Handles theme detection, switching, and persistence
-- Supports system theme detection with auto-switching
-- Smooth theme transitions with CSS custom properties
+#### **🎨 ThemeManager**
 
-#### 🔍 **ServicesManager**
+- Handles system theme detection and manual switching
+- Supports auto, light, and dark modes with smooth transitions
+- Persists user preferences in localStorage
+- Responsive to system theme changes
 
-- Retrieves available services from RFM repository via GitHub API
-- Real-time filtering and searching of services
-- Intelligent service configuration generation
-- Selected services management with persistence
+#### **🔍 ServicesManager**
 
-#### ⚙️ **ServiceConfigGenerator**
+- Fetches and caches services from RFM repository via GitHub API
+- Implements debounced search for optimal performance
+- Manages service selection state with event-driven updates
+- Provides real-time filtering and search capabilities
 
-- Smart favicon detection and URL generation
-- Service-specific configuration logic
-- Handles complex domain patterns and special cases
+#### **⚙️ ServiceConfigGenerator**
 
-#### 📤 **OutputManager**
+- Intelligent favicon detection from xixu-me/favicons repository
+- Smart configuration generation with domain parsing
+- Handles special cases and complex domain patterns
+- Caches favicon availability for performance optimization
 
-- Real-time META.js generation
-- Clipboard integration with error handling
-- File download functionality with progress indication
+#### **📤 OutputManager**
 
-#### 🎯 **MetaJSCustomizer**
+- Real-time META.js code generation and preview
+- Clipboard integration with comprehensive error handling
+- File download functionality with progress feedback
+- Template management and dynamic content substitution
 
-- Main app controller
-- Error handling and user feedback
-- Component orchestration and lifecycle management
+#### **🎯 MetaJSCustomizer (Main Controller)**
 
-### Technology Stack
+- Application lifecycle management and component orchestration
+- Global error handling with user-friendly feedback
+- Performance monitoring and optimization
+- Loading state management and initialization coordination
+
+### 🚀 Modern JavaScript Features
+
+- **ES6+ Modules**: Clean import/export system for better organization
+- **Async/Await**: Modern asynchronous programming patterns
+- **Error Boundaries**: Comprehensive error handling with user feedback
+- **Event-Driven Architecture**: Loose coupling between components
+- **Performance Optimization**: Debouncing, caching, and efficient DOM operations
+
+### 🎨 Enhanced UI/UX
+
+- **Glassmorphism Design**: Modern glass effects with backdrop blur
+- **Smooth Animations**: CSS-based transitions and micro-interactions
+- **Responsive Layout**: Mobile-first design that adapts to all screen sizes
+- **Accessibility First**: ARIA labels, semantic HTML, and keyboard navigation
+- **Loading States**: Clear feedback during async operations
+
+### 💻 Technology Stack
 
 - **Frontend**: Modern HTML5, CSS3, JavaScript (ES2020+)
-- **Styling**: CSS Custom Properties, CSS Grid/Flexbox, Glassmorphism
+- **Architecture**: Component-based modular design with ES6 modules
+- **Styling**: CSS Custom Properties, CSS Grid/Flexbox, Glassmorphism effects
 - **Methodology**: BEM (Block Element Modifier) for CSS organization
-- **Icons**: Font Awesome 6.5.1
-- **API**: GitHub REST API for dynamic service fetching
-- **Build**: No build process required - runs directly in browser
+- **Icons**: Font Awesome 6.5.1 for consistent iconography
+- **API Integration**: GitHub REST API for dynamic service fetching
+- **Performance**: Debounced search, caching strategies, optimized DOM operations
+- **Accessibility**: WCAG 2.1 AA compliant with comprehensive ARIA support
+- **Build**: Zero-build architecture - runs directly in modern browsers
 
 ## 🎨 Design Features
 

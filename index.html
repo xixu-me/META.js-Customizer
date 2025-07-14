@@ -47,111 +47,206 @@
 
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <link rel="preconnect" href="https://github.com" />
+    <link rel="preconnect" href="https://api.github.com" />
+    <link rel="preconnect" href="https://raw.githubusercontent.com" />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="src/styles/main.css" />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       rel="stylesheet"
     />
   </head>
   <body>
+    <!-- Theme Toggle -->
     <div class="theme-toggle">
-      <button id="theme-toggle" aria-label="Toggle dark mode">
-        <i class="fas fa-moon"></i>
+      <button id="theme-toggle" aria-label="Toggle theme" title="Theme: Auto">
+        <i class="fas fa-circle-half-stroke"></i>
       </button>
     </div>
 
+    <!-- Main Container -->
     <div class="container">
+      <!-- Header Section -->
       <header class="header">
-        <h1><i class="fas fa-cogs"></i> META.js Customizer</h1>
+        <h1>
+          <i class="fas fa-cogs" aria-hidden="true"></i>
+          META.js Customizer
+        </h1>
         <p class="subtitle">
           Create your custom META.js of
-          <a href="https://github.com/xixu-me/META" target="_blank">
-            <i class="fab fa-github"></i> xixu-me/META</a
+          <a
+            href="https://github.com/xixu-me/META"
+            target="_blank"
+            rel="noopener"
           >
-          with service rulesets from
-          <a href="https://github.com/xixu-me/RFM" target="_blank">
-            <i class="fab fa-github"></i> xixu-me/RFM</a
+            <i class="fab fa-github" aria-hidden="true"></i> xixu-me/META
+          </a>
+          using service rulesets from
+          <a
+            href="https://github.com/xixu-me/RFM"
+            target="_blank"
+            rel="noopener"
           >
+            <i class="fab fa-github" aria-hidden="true"></i> xixu-me/RFM
+          </a>
         </p>
       </header>
 
-      <div id="services-container" class="card">
-        <div class="card-header">
-          <h2><i class="fas fa-list"></i> Services</h2>
-        </div>
-        <div class="card-content">
-          <div class="routing-priority-reminder">
-            <i class="fas fa-exclamation-triangle warning-icon"></i>
-            <div class="content">
-              <strong>Routing Priority:</strong>
-              <span>
-                Routing rules are matched in order from top to bottom, with the
-                rule at the top of the list taking precedence over the rules
-                below it.
-              </span>
-            </div>
+      <!-- Services Configuration Section -->
+      <main>
+        <section
+          id="services-container"
+          class="card"
+          aria-labelledby="services-heading"
+        >
+          <div class="card-header">
+            <h2 id="services-heading">
+              <i class="fas fa-list" aria-hidden="true"></i>
+              Services Configuration
+            </h2>
           </div>
-          <div class="services-controls">
-            <div class="search-container">
-              <div class="search-input-wrapper">
-                <i class="fas fa-search search-icon"></i>
-                <input
-                  type="text"
-                  id="search-input"
-                  placeholder="Search and add services..."
-                />
+          <div class="card-content">
+            <!-- Routing Priority Information -->
+            <div
+              class="routing-priority-reminder"
+              role="note"
+              aria-label="Important routing information"
+            >
+              <i
+                class="fas fa-exclamation-triangle warning-icon"
+                aria-hidden="true"
+              ></i>
+              <div class="content">
+                <strong>Routing Priority:</strong>
+                <span>
+                  Routing rules are matched in order from top to bottom, with
+                  the rule at the top of the list taking precedence over the
+                  rules below it.
+                </span>
               </div>
-              <div class="services-count">
-                <i class="fas fa-check-circle"></i>
-                <span id="selected-count">0 selected</span>
+            </div>
+
+            <!-- Services Controls -->
+            <div class="services-controls">
+              <div class="search-container">
+                <div class="search-input-wrapper">
+                  <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                  <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search and add services..."
+                    aria-label="Search for services"
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+                </div>
+                <div class="services-count" role="status" aria-live="polite">
+                  <i class="fas fa-check-circle" aria-hidden="true"></i>
+                  <span id="selected-count">0 of 0 selected</span>
+                </div>
+              </div>
+
+              <!-- Search Results Dropdown -->
+              <div
+                id="search-results"
+                class="search-results"
+                role="listbox"
+                aria-label="Available services"
+                aria-hidden="true"
+              ></div>
+            </div>
+
+            <!-- Selected Services List -->
+            <div
+              id="selected-services"
+              role="list"
+              aria-label="Selected services"
+              aria-describedby="services-description"
+            >
+              <div class="no-services">
+                <i class="fas fa-inbox" aria-hidden="true"></i>
+                <h3>No services selected</h3>
+                <p id="services-description">
+                  Search for services above to get started
+                </p>
               </div>
             </div>
-            <div id="search-results" class="search-results"></div>
           </div>
-          <div id="selected-services">
-            <div class="no-services">
-              <i class="fas fa-inbox"></i>
-              <p>No services selected</p>
-              <small>Search for services above to get started</small>
+        </section>
+
+        <!-- Generated Output Section -->
+        <section
+          id="output-container"
+          class="card"
+          aria-labelledby="output-heading"
+        >
+          <div class="card-header">
+            <h2 id="output-heading">
+              <i class="fas fa-code" aria-hidden="true"></i>
+              Generated META.js
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="output-actions">
+              <button
+                id="copyButton"
+                class="btn btn-primary"
+                disabled
+                aria-describedby="copy-description"
+              >
+                <i class="fas fa-copy" aria-hidden="true"></i>
+                Copy to Clipboard
+              </button>
+              <button
+                id="downloadButton"
+                class="btn btn-secondary"
+                disabled
+                aria-describedby="download-description"
+              >
+                <i class="fas fa-download" aria-hidden="true"></i>
+                Download META.js
+              </button>
+            </div>
+            <div class="sr-only">
+              <p id="copy-description">
+                Copy the generated META.js to your clipboard
+              </p>
+              <p id="download-description">
+                Download the generated META.js as a file
+              </p>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
-      <div id="output-container" class="card">
+      <!-- Information Section -->
+      <aside class="info-banner card" aria-labelledby="info-heading">
         <div class="card-header">
-          <h2><i class="fas fa-code"></i> Generated META.js</h2>
-        </div>
-        <div class="card-content">
-          <div class="output-actions">
-            <button id="copyButton" class="btn btn-primary">
-              <i class="fas fa-copy"></i> Copy
-            </button>
-            <button id="downloadButton" class="btn btn-secondary">
-              <i class="fas fa-download"></i> Download
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-banner card">
-        <div class="card-header">
-          <h2><i class="fas fa-info-circle"></i> Icon Configuration Guide</h2>
+          <h2 id="info-heading">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            Icon Configuration Guide
+          </h2>
         </div>
         <div class="card-content">
           <div class="info-content">
             <p>
               Service icons are sourced from
-              <a href="https://github.com/xixu-me/favicons" target="_blank">
-                <i class="fab fa-github"></i> xixu-me/favicons</a
+              <a
+                href="https://github.com/xixu-me/favicons"
+                target="_blank"
+                rel="noopener"
+              >
+                <i class="fab fa-github" aria-hidden="true"></i>
+                xixu-me/favicons </a
               >. Auto-generated configurations may require manual adjustments
               based on availability.
             </p>
 
-            <h3><i class="fas fa-cog"></i> Configuration Rules</h3>
+            <h3>
+              <i class="fas fa-cog" aria-hidden="true"></i>
+              Configuration Rules
+            </h3>
             <ul>
               <li>
                 <strong>Icon unavailable:</strong> Uses specific
@@ -167,7 +262,7 @@
                 >
               </li>
               <li>
-                <strong>Name does not match SLD:</strong> Adds <code>sld</code>
+                <strong>Name mismatch:</strong> Adds <code>sld</code>
                 <span class="example"
                   >(e.g., "xai" → <code>sld: "x", tld: "ai"</code>)</span
                 >
@@ -175,21 +270,27 @@
             </ul>
           </div>
         </div>
-      </div>
+      </aside>
 
+      <!-- Footer -->
       <footer class="footer">
         <p>
-          <i class="fas fa-code-branch"></i>
+          <i class="fas fa-code-branch" aria-hidden="true"></i>
           This web app is open source at
           <a
             href="https://github.com/xixu-me/META.js-Customizer"
             target="_blank"
-            ><i class="fab fa-github"></i> xixu-me/META.js-Customizer</a
+            rel="noopener"
           >
+            <i class="fab fa-github" aria-hidden="true"></i>
+            xixu-me/META.js-Customizer
+          </a>
         </p>
       </footer>
     </div>
+
+    <!-- Scripts -->
     <script src="src/templates/meta-template.js"></script>
-    <script src="src/scripts/main.js"></script>
+    <script type="module" src="src/scripts/app.js"></script>
   </body>
 </html>

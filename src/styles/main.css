@@ -1,15 +1,24 @@
 /**
  * META.js Customizer - Main Stylesheet
- * Modern, accessible, and maintainable styles with BEM methodology
- * Author: xixu-me
- * License: GPL-3.0
+ * 
+ * Modern, accessible, and maintainable styles following:
+ * - BEM methodology for consistent naming
+ * - CSS Custom Properties for theming
+ * - Modular architecture with component separation
+ * - Glassmorphism design with backdrop blur effects
+ * - Mobile-first responsive design
+ * - WCAG compliance for accessibility
+ * 
+ * @author xixu-me
+ * @license GPL-3.0
+ * @version 2.0.0
  */
 
 /* ==========================================================================
    CSS Custom Properties (Design System)
    ========================================================================== */
 
-/* CSS Variables for theming */
+/* Design tokens for consistent theming */
 :root {
   --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
@@ -1098,3 +1107,418 @@ body::before {
   );
   border-color: rgba(245, 158, 11, 0.4);
 }
+
+/* ==========================================================================
+   Component Styles
+   ========================================================================== */
+
+/* Loading States */
+.app-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.loading-spinner i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error States */
+.initialization-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: var(--danger-color);
+  margin-bottom: 1.5rem;
+}
+
+.initialization-error h2 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.initialization-error p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.initialization-error details {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.initialization-error summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.initialization-error pre {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Toast Notifications */
+.error-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  max-width: 400px;
+  background: rgba(220, 38, 38, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.2);
+  transform: translateX(120%);
+  transition: transform 0.3s ease;
+}
+
+.error-toast.show {
+  transform: translateX(0);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-primary);
+}
+
+.toast-content i:first-child {
+  color: var(--danger-color);
+  font-size: 1.25rem;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+  margin-left: auto;
+}
+
+.toast-close:hover {
+  color: var(--text-primary);
+}
+
+/* Output Display */
+.output-display {
+  margin-top: 1rem;
+}
+
+.output-display pre {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.output-display code {
+  color: var(--text-primary);
+}
+
+.no-output {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-secondary);
+}
+
+.no-output i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-output h3 {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.output-error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--danger-color);
+}
+
+.output-error i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.output-error h3 {
+  margin-bottom: 0.5rem;
+}
+
+/* Search Results Enhancements */
+.search-error {
+  padding: 1rem;
+  text-align: center;
+  color: var(--danger-color);
+}
+
+.search-error i {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-no-results {
+  color: var(--text-muted) !important;
+  cursor: default !important;
+  font-style: italic;
+}
+
+.search-no-results:hover {
+  background: transparent !important;
+  transform: none !important;
+}
+
+/* Selected Services Enhancements */
+.selected-service-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.selected-service-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.2s ease;
+}
+
+.selected-service-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.1);
+}
+
+.selected-service-item:hover::before {
+  width: 8px;
+}
+
+.service-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.service-drag-handle {
+  color: var(--text-muted);
+  cursor: grab;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.service-drag-handle:hover {
+  color: var(--text-secondary);
+}
+
+.service-drag-handle:active {
+  cursor: grabbing;
+}
+
+.service-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.service-remove-btn {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: var(--danger-color);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.service-remove-btn:hover {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.4);
+  transform: scale(1.1);
+}
+
+.service-remove-btn:active {
+  transform: scale(0.95);
+}
+
+/* Button Enhancements */
+.btn-danger {
+  background: linear-gradient(
+    135deg,
+    var(--danger-color) 0%,
+    var(--danger-hover) 100%
+  );
+  border: 1px solid var(--danger-color);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, var(--danger-hover) 0%, #991b1b 100%);
+  border-color: var(--danger-hover);
+}
+
+/* Dark Theme Specific Overrides */
+[data-theme="dark"] .output-display pre {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .selected-service-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .selected-service-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Focus Management for Accessibility */
+.focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-secondary: #000000;
+  }
+
+  [data-theme="dark"] {
+    --border-color: #ffffff;
+    --text-secondary: #ffffff;
+  }
+}
+
+/* ==========================================================================
+   Accessibility Utilities
+   ========================================================================== */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Show screen reader content when focused */
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--bg-primary);
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 10001;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* ==========================================================================
+   Global Styles
+   ========================================================================== */
