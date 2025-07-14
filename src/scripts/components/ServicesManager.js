@@ -30,6 +30,9 @@ export class ServicesManager {
       draggedElement: null,
       draggedIndex: -1,
       placeholder: null,
+      initialMouseY: 0,
+      initialElementY: 0,
+      mouseOffset: 0,
     };
 
     this.elements = {
@@ -363,26 +366,42 @@ export class ServicesManager {
     this.dragState.draggedElement = serviceItem;
     this.dragState.draggedIndex = parseInt(serviceItem.dataset.index);
 
-    // Create placeholder
+    // Store initial positions for mouse following
+    const rect = serviceItem.getBoundingClientRect();
+    this.dragState.initialMouseY = event.clientY;
+    this.dragState.initialElementY = rect.top;
+    this.dragState.mouseOffset = event.clientY - rect.top;
+
+    // Create placeholder with smooth appearance
     this.dragState.placeholder = document.createElement("div");
     this.dragState.placeholder.className =
       "selected-service-item drag-placeholder";
     this.dragState.placeholder.innerHTML = `
       <div class="service-info">
         <i class="fas fa-grip-lines service-drag-handle"></i>
-        <span class="service-name">Drop here</span>
+        <span class="service-name"></span>
       </div>
     `;
 
-    // Add dragging class
+    // Add dragging classes with smooth animation
     serviceItem.classList.add("dragging");
     document.body.classList.add("dragging");
 
-    // Insert placeholder
+    // Insert placeholder with animation
+    this.dragState.placeholder.style.height = "0px";
+    this.dragState.placeholder.style.opacity = "0";
+    this.dragState.placeholder.style.marginBottom = "0px";
     serviceItem.parentNode.insertBefore(
       this.dragState.placeholder,
       serviceItem.nextSibling
     );
+
+    // Animate placeholder appearance
+    requestAnimationFrame(() => {
+      this.dragState.placeholder.style.height = serviceItem.offsetHeight + "px";
+      this.dragState.placeholder.style.opacity = "1";
+      this.dragState.placeholder.style.marginBottom = "0.75rem";
+    });
   }
 
   /**
@@ -392,6 +411,15 @@ export class ServicesManager {
   handleDragMove(event) {
     if (!this.dragState.isDragging) return;
 
+    // Make dragged element follow mouse vertically
+    const draggedElement = this.dragState.draggedElement;
+    if (draggedElement) {
+      const deltaY = event.clientY - this.dragState.initialMouseY;
+      draggedElement.style.transform = `translateY(${deltaY}px) scale(1.05)`;
+      draggedElement.style.zIndex = "1000";
+      draggedElement.style.position = "relative";
+    }
+
     const serviceItems = Array.from(
       this.elements.selectedServices.querySelectorAll(
         ".selected-service-item:not(.dragging):not(.drag-placeholder)"
@@ -399,11 +427,20 @@ export class ServicesManager {
     );
 
     let targetIndex = serviceItems.length; // Default to end
+    let closestItem = null;
+    let closestDistance = Infinity;
 
+    // Find the closest item for smoother animation
     for (let i = 0; i < serviceItems.length; i++) {
       const item = serviceItems[i];
       const rect = item.getBoundingClientRect();
       const itemCenter = rect.top + rect.height / 2;
+      const distance = Math.abs(event.clientY - itemCenter);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestItem = item;
+      }
 
       if (event.clientY < itemCenter) {
         targetIndex = i;
@@ -411,7 +448,21 @@ export class ServicesManager {
       }
     }
 
-    // Move placeholder to new position
+    // Add smooth animation classes to other items
+    serviceItems.forEach((item, index) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+
+      if (event.clientY < itemCenter && index >= targetIndex) {
+        item.style.transform = "translateY(8px)";
+      } else if (event.clientY > itemCenter && index < targetIndex) {
+        item.style.transform = "translateY(-8px)";
+      } else {
+        item.style.transform = "translateY(0)";
+      }
+    });
+
+    // Move placeholder to new position with smooth transition
     const targetItem = serviceItems[targetIndex];
     if (targetItem) {
       targetItem.parentNode.insertBefore(
@@ -431,6 +482,18 @@ export class ServicesManager {
   handleDragEnd(event) {
     if (!this.dragState.isDragging) return;
 
+    // Reset transforms on all items with smooth animation
+    const allServiceItems = Array.from(
+      this.elements.selectedServices.querySelectorAll(
+        ".selected-service-item:not(.dragging):not(.drag-placeholder)"
+      )
+    );
+
+    allServiceItems.forEach((item) => {
+      item.style.transform = "";
+      item.style.transition = "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+    });
+
     // Calculate new index based on placeholder position
     const allItems = Array.from(
       this.elements.selectedServices.querySelectorAll(
@@ -446,14 +509,30 @@ export class ServicesManager {
     // Update services order
     this.reorderServices(this.dragState.draggedIndex, newIndex);
 
-    // Clean up
-    this.dragState.draggedElement.classList.remove("dragging");
-    document.body.classList.remove("dragging");
+    // Animate placeholder disappearance
     if (this.dragState.placeholder && this.dragState.placeholder.parentNode) {
-      this.dragState.placeholder.parentNode.removeChild(
-        this.dragState.placeholder
-      );
+      this.dragState.placeholder.style.height = "0px";
+      this.dragState.placeholder.style.opacity = "0";
+      this.dragState.placeholder.style.marginBottom = "0px";
+
+      setTimeout(() => {
+        if (
+          this.dragState.placeholder &&
+          this.dragState.placeholder.parentNode
+        ) {
+          this.dragState.placeholder.parentNode.removeChild(
+            this.dragState.placeholder
+          );
+        }
+      }, 300);
     }
+
+    // Clean up with smooth animation
+    this.dragState.draggedElement.classList.remove("dragging");
+    this.dragState.draggedElement.style.transform = "";
+    this.dragState.draggedElement.style.zIndex = "";
+    this.dragState.draggedElement.style.position = "";
+    document.body.classList.remove("dragging");
 
     // Reset drag state
     this.dragState = {
@@ -461,11 +540,16 @@ export class ServicesManager {
       draggedElement: null,
       draggedIndex: -1,
       placeholder: null,
+      initialMouseY: 0,
+      initialElementY: 0,
+      mouseOffset: 0,
     };
 
-    // Update UI and trigger change event
-    this.renderSelectedServices();
-    this.triggerSelectionChange();
+    // Update UI and trigger change event with smooth animation
+    setTimeout(() => {
+      this.renderSelectedServices();
+      this.triggerSelectionChange();
+    }, 50);
   }
 
   /**

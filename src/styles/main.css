@@ -996,7 +996,7 @@ body::before {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -1578,18 +1578,37 @@ body::before {
    ========================================================================== */
 .dragging .selected-service-item {
   z-index: 1000;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: scale(1.02);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .drag-placeholder {
-  border: 2px dashed var(--primary-color) !important;
-  background: rgba(37, 99, 235, 0.1) !important;
-  opacity: 0.7;
+  border: 2px solid var(--primary-color) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08),
+    rgba(37, 99, 235, 0.15)
+  ) !important;
+  opacity: 1;
+  animation: pulse-glow 1.5s ease-in-out infinite alternate;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+    transform: scale(1.02);
+  }
 }
 
 .drag-placeholder .service-name {
   color: var(--primary-color) !important;
-  font-style: italic;
+  opacity: 0.8;
 }
 
 body.dragging {
@@ -1604,26 +1623,48 @@ body.dragging * {
 .service-drag-handle {
   cursor: grab;
   opacity: 0.6;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .service-drag-handle:hover {
   opacity: 1;
   color: var(--primary-color);
+  transform: scale(1.1);
 }
 
 .service-drag-handle:active {
   cursor: grabbing;
+  transform: scale(0.95);
 }
 
 .selected-service-item.dragging {
-  transition: none;
+  transition: none !important;
   z-index: 1000;
   position: relative;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+/* Smooth animations for reordering */
+.selected-service-item:not(.dragging):not(.drag-placeholder) {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced animations for drag interactions */
+.selected-service-item.drag-over-top {
+  transform: translateY(-8px);
+}
+
+.selected-service-item.drag-over-bottom {
+  transform: translateY(8px);
 }
 
 /* Dark theme drag styles */
 [data-theme="dark"] .drag-placeholder {
   border-color: var(--primary-color) !important;
-  background: rgba(37, 99, 235, 0.15) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.12),
+    rgba(37, 99, 235, 0.2)
+  ) !important;
 }
