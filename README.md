@@ -217,8 +217,8 @@ This project is licensed under the **GNU General Public License v3.0** - see the
 
 ## 🤝 Related Projects
 
-- **[xixu-me/META](https://github.com/xixu-me/META)** - The main META.js project
-- **[xixu-me/RFM](https://github.com/xixu-me/RFM)** - Rule sets and filters
+- **[xixu-me/META](https://github.com/xixu-me/META)** - The main META.js repository
+- **[xixu-me/RFM](https://github.com/xixu-me/RFM)** - Rulesets
 - **[xixu-me/favicons](https://github.com/xixu-me/favicons)** - Service icons repository
 
 ## 📞 Support
