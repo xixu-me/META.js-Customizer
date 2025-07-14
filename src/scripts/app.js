@@ -13,7 +13,6 @@
  *
  * @author xixu-me
  * @license GPL-3.0
- * @version 2.0.0
  */
 
 import { OutputManager } from "./components/OutputManager.js";

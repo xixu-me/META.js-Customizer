@@ -11,7 +11,6 @@
  * 
  * @author xixu-me
  * @license GPL-3.0
- * @version 2.0.0
  */
 
 /* ==========================================================================
@@ -1033,6 +1032,64 @@ body::before {
   color: var(--text-primary);
 }
 
+/* Drag Handle Styles */
+.drag-handle {
+  color: var(--text-secondary);
+  cursor: grab;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+}
+
+.drag-handle:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* SortableJS Styles */
+.sortable-ghost {
+  opacity: 0.4;
+  background: rgba(99, 102, 241, 0.2) !important;
+  border: 2px dashed rgba(99, 102, 241, 0.5) !important;
+  transform: scale(0.98);
+}
+
+.sortable-drag {
+  opacity: 0.9;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  transform: rotate(3deg) scale(1.02);
+  z-index: 1000 !important;
+}
+
+.sortable-chosen {
+  cursor: grabbing;
+}
+
+.sortable-fallback {
+  opacity: 0.8;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: rotate(3deg);
+}
+
+/* Container state during dragging */
+#selected-services.is-dragging {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+#selected-services.is-dragging
+  .selected-service-item:not(.sortable-drag):not(.sortable-ghost) {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
 .delete-button {
   background: linear-gradient(
     135deg,
@@ -1418,21 +1475,6 @@ body::before {
   flex: 1;
 }
 
-.service-drag-handle {
-  color: var(--text-muted);
-  cursor: grab;
-  font-size: 0.875rem;
-  transition: color 0.2s ease;
-}
-
-.service-drag-handle:hover {
-  color: var(--text-secondary);
-}
-
-.service-drag-handle:active {
-  cursor: grabbing;
-}
-
 .service-name {
   font-weight: 500;
   color: var(--text-primary);
@@ -1493,6 +1535,26 @@ body::before {
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* Dark theme drag handle styles */
+[data-theme="dark"] .drag-handle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .drag-handle:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Dark theme sortable styles */
+[data-theme="dark"] .sortable-ghost {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border: 2px dashed rgba(99, 102, 241, 0.4) !important;
+}
+
+[data-theme="dark"] #selected-services.is-dragging {
+  background: rgba(99, 102, 241, 0.03);
+}
+
 /* Focus Management for Accessibility */
 .focus-visible {
   outline: 2px solid var(--primary-color);
@@ -1507,6 +1569,15 @@ body::before {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Disable drag animations for reduced motion */
+  .sortable-ghost,
+  .sortable-drag,
+  .sortable-fallback {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
   }
 }
 
@@ -1571,100 +1642,4 @@ body::before {
 
 .skip-link:focus {
   top: 6px;
-}
-
-/* ==========================================================================
-   Drag and drop styles
-   ========================================================================== */
-.dragging .selected-service-item {
-  z-index: 1000;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  transform: scale(1.02);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.drag-placeholder {
-  border: 2px solid var(--primary-color) !important;
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.08),
-    rgba(37, 99, 235, 0.15)
-  ) !important;
-  opacity: 1;
-  animation: pulse-glow 1.5s ease-in-out infinite alternate;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
-    transform: scale(1);
-  }
-  100% {
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
-    transform: scale(1.02);
-  }
-}
-
-.drag-placeholder .service-name {
-  color: var(--primary-color) !important;
-  opacity: 0.8;
-}
-
-body.dragging {
-  cursor: grabbing !important;
-  user-select: none;
-}
-
-body.dragging * {
-  cursor: grabbing !important;
-}
-
-.service-drag-handle {
-  cursor: grab;
-  opacity: 0.6;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.service-drag-handle:hover {
-  opacity: 1;
-  color: var(--primary-color);
-  transform: scale(1.1);
-}
-
-.service-drag-handle:active {
-  cursor: grabbing;
-  transform: scale(0.95);
-}
-
-.selected-service-item.dragging {
-  transition: none !important;
-  z-index: 1000;
-  position: relative;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
-}
-
-/* Smooth animations for reordering */
-.selected-service-item:not(.dragging):not(.drag-placeholder) {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Enhanced animations for drag interactions */
-.selected-service-item.drag-over-top {
-  transform: translateY(-8px);
-}
-
-.selected-service-item.drag-over-bottom {
-  transform: translateY(8px);
-}
-
-/* Dark theme drag styles */
-[data-theme="dark"] .drag-placeholder {
-  border-color: var(--primary-color) !important;
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.12),
-    rgba(37, 99, 235, 0.2)
-  ) !important;
 }

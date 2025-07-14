@@ -9,7 +9,6 @@
  *
  * @author xixu-me
  * @license GPL-3.0
- * @version 2.0.0
  */
 
 export class ServicesManager {
@@ -21,19 +20,9 @@ export class ServicesManager {
 
     this.allServices = [];
     this.selectedServices = new Set();
-    this.selectedServicesOrder = []; // Track order for drag functionality
+    this.selectedServicesOrder = [];
     this.searchTimeout = null;
-
-    // Drag state
-    this.dragState = {
-      isDragging: false,
-      draggedElement: null,
-      draggedIndex: -1,
-      placeholder: null,
-      initialMouseY: 0,
-      initialElementY: 0,
-      mouseOffset: 0,
-    };
+    this.sortable = null; // SortableJS instance
 
     this.elements = {
       searchInput: document.getElementById("search-input"),
@@ -126,26 +115,6 @@ export class ServicesManager {
     // Handle selected service removal
     this.elements.selectedServices.addEventListener("click", (e) => {
       this.handleSelectedServiceClick(e);
-    });
-
-    // Handle drag events
-    this.setupDragListeners();
-  }
-
-  /**
-   * Set up drag and drop event listeners
-   */
-  setupDragListeners() {
-    this.elements.selectedServices.addEventListener("mousedown", (e) => {
-      this.handleDragStart(e);
-    });
-
-    document.addEventListener("mousemove", (e) => {
-      this.handleDragMove(e);
-    });
-
-    document.addEventListener("mouseup", (e) => {
-      this.handleDragEnd(e);
     });
   }
 
@@ -299,6 +268,7 @@ export class ServicesManager {
           <p>Search for services above to get started</p>
         </div>
       `;
+      this.destroySortable();
       return;
     }
 
@@ -306,9 +276,11 @@ export class ServicesManager {
     this.elements.selectedServices.innerHTML = this.selectedServicesOrder
       .map(
         (serviceName, index) => `
-        <div class="selected-service-item" data-index="${index}">
+        <div class="selected-service-item" data-index="${index}" data-service-name="${serviceName}">
+          <div class="drag-handle" title="Drag to reorder">
+            <i class="fas fa-grip-vertical"></i>
+          </div>
           <div class="service-info">
-            <i class="fas fa-grip-lines service-drag-handle" title="Drag to reorder"></i>
             <span class="service-name">${serviceName}</span>
           </div>
           <button class="service-remove-btn" 
@@ -321,6 +293,74 @@ export class ServicesManager {
       `
       )
       .join("");
+
+    // Initialize or reinitialize sortable
+    this.initializeSortable();
+  }
+
+  /**
+   * Initialize SortableJS for drag-and-drop reordering
+   */
+  initializeSortable() {
+    // Destroy existing sortable instance if it exists
+    this.destroySortable();
+
+    // Only initialize if we have selected services
+    if (this.selectedServices.size === 0) {
+      return;
+    }
+
+    // Initialize SortableJS
+    this.sortable = new Sortable(this.elements.selectedServices, {
+      animation: 200, // Animation speed in ms
+      ghostClass: "sortable-ghost", // Class for the drop placeholder
+      dragClass: "sortable-drag", // Class for the item being dragged
+      chosenClass: "sortable-chosen", // Class for the chosen item
+      handle: ".drag-handle", // Only allow dragging by the handle
+      forceFallback: true, // Force HTML5 DnD fallback for better cross-browser support
+      fallbackClass: "sortable-fallback", // Class for fallback
+      onStart: (evt) => {
+        // Add dragging state to container
+        this.elements.selectedServices.classList.add("is-dragging");
+      },
+      onEnd: (evt) => {
+        // Remove dragging state from container
+        this.elements.selectedServices.classList.remove("is-dragging");
+
+        // Update the order if the position changed
+        if (evt.oldIndex !== evt.newIndex) {
+          this.updateServiceOrder(evt.oldIndex, evt.newIndex);
+        }
+      },
+    });
+  }
+
+  /**
+   * Destroy the current SortableJS instance
+   */
+  destroySortable() {
+    if (this.sortable) {
+      this.sortable.destroy();
+      this.sortable = null;
+    }
+  }
+
+  /**
+   * Update service order after drag and drop
+   * @param {number} oldIndex - Previous index
+   * @param {number} newIndex - New index
+   */
+  updateServiceOrder(oldIndex, newIndex) {
+    // Move the item in the order array
+    const movedService = this.selectedServicesOrder.splice(oldIndex, 1)[0];
+    this.selectedServicesOrder.splice(newIndex, 0, movedService);
+
+    // Trigger selection change event for other components
+    this.triggerSelectionChange();
+
+    console.log(
+      `Moved service "${movedService}" from position ${oldIndex} to ${newIndex}`
+    );
   }
 
   /**
@@ -350,218 +390,21 @@ export class ServicesManager {
   }
 
   /**
-   * Handle drag start
-   * @param {MouseEvent} event - Mouse event
+   * Destroy the services manager and cleanup
    */
-  handleDragStart(event) {
-    const dragHandle = event.target.closest(".service-drag-handle");
-    if (!dragHandle) return;
-
-    event.preventDefault();
-
-    const serviceItem = dragHandle.closest(".selected-service-item");
-    if (!serviceItem) return;
-
-    this.dragState.isDragging = true;
-    this.dragState.draggedElement = serviceItem;
-    this.dragState.draggedIndex = parseInt(serviceItem.dataset.index);
-
-    // Store initial positions for mouse following
-    const rect = serviceItem.getBoundingClientRect();
-    this.dragState.initialMouseY = event.clientY;
-    this.dragState.initialElementY = rect.top;
-    this.dragState.mouseOffset = event.clientY - rect.top;
-
-    // Create placeholder with smooth appearance
-    this.dragState.placeholder = document.createElement("div");
-    this.dragState.placeholder.className =
-      "selected-service-item drag-placeholder";
-    this.dragState.placeholder.innerHTML = `
-      <div class="service-info">
-        <i class="fas fa-grip-lines service-drag-handle"></i>
-        <span class="service-name"></span>
-      </div>
-    `;
-
-    // Add dragging classes with smooth animation
-    serviceItem.classList.add("dragging");
-    document.body.classList.add("dragging");
-
-    // Insert placeholder with animation
-    this.dragState.placeholder.style.height = "0px";
-    this.dragState.placeholder.style.opacity = "0";
-    this.dragState.placeholder.style.marginBottom = "0px";
-    serviceItem.parentNode.insertBefore(
-      this.dragState.placeholder,
-      serviceItem.nextSibling
-    );
-
-    // Animate placeholder appearance
-    requestAnimationFrame(() => {
-      this.dragState.placeholder.style.height = serviceItem.offsetHeight + "px";
-      this.dragState.placeholder.style.opacity = "1";
-      this.dragState.placeholder.style.marginBottom = "0.75rem";
-    });
-  }
-
-  /**
-   * Handle drag move
-   * @param {MouseEvent} event - Mouse event
-   */
-  handleDragMove(event) {
-    if (!this.dragState.isDragging) return;
-
-    // Make dragged element follow mouse vertically
-    const draggedElement = this.dragState.draggedElement;
-    if (draggedElement) {
-      const deltaY = event.clientY - this.dragState.initialMouseY;
-      draggedElement.style.transform = `translateY(${deltaY}px) scale(1.05)`;
-      draggedElement.style.zIndex = "1000";
-      draggedElement.style.position = "relative";
+  destroy() {
+    // Clear search timeout
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = null;
     }
 
-    const serviceItems = Array.from(
-      this.elements.selectedServices.querySelectorAll(
-        ".selected-service-item:not(.dragging):not(.drag-placeholder)"
-      )
-    );
+    // Destroy sortable instance
+    this.destroySortable();
 
-    let targetIndex = serviceItems.length; // Default to end
-    let closestItem = null;
-    let closestDistance = Infinity;
-
-    // Find the closest item for smoother animation
-    for (let i = 0; i < serviceItems.length; i++) {
-      const item = serviceItems[i];
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.top + rect.height / 2;
-      const distance = Math.abs(event.clientY - itemCenter);
-
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestItem = item;
-      }
-
-      if (event.clientY < itemCenter) {
-        targetIndex = i;
-        break;
-      }
-    }
-
-    // Add smooth animation classes to other items
-    serviceItems.forEach((item, index) => {
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.top + rect.height / 2;
-
-      if (event.clientY < itemCenter && index >= targetIndex) {
-        item.style.transform = "translateY(8px)";
-      } else if (event.clientY > itemCenter && index < targetIndex) {
-        item.style.transform = "translateY(-8px)";
-      } else {
-        item.style.transform = "translateY(0)";
-      }
-    });
-
-    // Move placeholder to new position with smooth transition
-    const targetItem = serviceItems[targetIndex];
-    if (targetItem) {
-      targetItem.parentNode.insertBefore(
-        this.dragState.placeholder,
-        targetItem
-      );
-    } else {
-      // Insert at end
-      this.elements.selectedServices.appendChild(this.dragState.placeholder);
-    }
-  }
-
-  /**
-   * Handle drag end
-   * @param {MouseEvent} event - Mouse event
-   */
-  handleDragEnd(event) {
-    if (!this.dragState.isDragging) return;
-
-    // Reset transforms on all items with smooth animation
-    const allServiceItems = Array.from(
-      this.elements.selectedServices.querySelectorAll(
-        ".selected-service-item:not(.dragging):not(.drag-placeholder)"
-      )
-    );
-
-    allServiceItems.forEach((item) => {
-      item.style.transform = "";
-      item.style.transition = "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
-    });
-
-    // Calculate new index based on placeholder position
-    const allItems = Array.from(
-      this.elements.selectedServices.querySelectorAll(
-        ".selected-service-item, .drag-placeholder"
-      )
-    );
-    const placeholderIndex = allItems.indexOf(this.dragState.placeholder);
-    const newIndex =
-      placeholderIndex > this.dragState.draggedIndex
-        ? placeholderIndex - 1
-        : placeholderIndex;
-
-    // Update services order
-    this.reorderServices(this.dragState.draggedIndex, newIndex);
-
-    // Animate placeholder disappearance
-    if (this.dragState.placeholder && this.dragState.placeholder.parentNode) {
-      this.dragState.placeholder.style.height = "0px";
-      this.dragState.placeholder.style.opacity = "0";
-      this.dragState.placeholder.style.marginBottom = "0px";
-
-      setTimeout(() => {
-        if (
-          this.dragState.placeholder &&
-          this.dragState.placeholder.parentNode
-        ) {
-          this.dragState.placeholder.parentNode.removeChild(
-            this.dragState.placeholder
-          );
-        }
-      }, 300);
-    }
-
-    // Clean up with smooth animation
-    this.dragState.draggedElement.classList.remove("dragging");
-    this.dragState.draggedElement.style.transform = "";
-    this.dragState.draggedElement.style.zIndex = "";
-    this.dragState.draggedElement.style.position = "";
-    document.body.classList.remove("dragging");
-
-    // Reset drag state
-    this.dragState = {
-      isDragging: false,
-      draggedElement: null,
-      draggedIndex: -1,
-      placeholder: null,
-      initialMouseY: 0,
-      initialElementY: 0,
-      mouseOffset: 0,
-    };
-
-    // Update UI and trigger change event with smooth animation
-    setTimeout(() => {
-      this.renderSelectedServices();
-      this.triggerSelectionChange();
-    }, 50);
-  }
-
-  /**
-   * Reorder services array
-   * @param {number} fromIndex - Original index
-   * @param {number} toIndex - Target index
-   */
-  reorderServices(fromIndex, toIndex) {
-    if (fromIndex === toIndex) return;
-
-    const item = this.selectedServicesOrder[fromIndex];
-    this.selectedServicesOrder.splice(fromIndex, 1);
-    this.selectedServicesOrder.splice(toIndex, 0, item);
+    // Clear data
+    this.allServices = [];
+    this.selectedServices.clear();
+    this.selectedServicesOrder = [];
   }
 }
