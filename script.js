@@ -99,11 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       allServices = mrsFiles.map((file) => {
         const name = file.path.replace(".mrs", "");
-        // A simple heuristic to format the name
-        const formattedName = name
-          .replace(/-/g, " ")
-          .replace("Google", "Google ")
-          .replace(" ", "");
+        const formattedName = name;
 
         const serviceDefinition = {
           name: formattedName,
