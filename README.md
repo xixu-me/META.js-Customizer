@@ -1,9 +1,5 @@
 # META.js Customizer
 
-![License](https://img.shields.io/github/license/xixu-me/META.js-Customizer)
-![Stars](https://img.shields.io/github/stars/xixu-me/META.js-Customizer)
-![Forks](https://img.shields.io/github/forks/xixu-me/META.js-Customizer)
-
 ## 🎯 Overview
 
 META.js Customizer is a modern, intuitive web application that allows users to easily create custom META.js configurations for [xixu-me/META](https://github.com/xixu-me/META). It provides a beautiful visual interface to select and configure service rulesets from the [xixu-me/RFM](https://github.com/xixu-me/RFM) repository.
