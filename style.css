@@ -1042,3 +1042,48 @@ body::before {
   transform: scale(1.05) translateY(0px);
   transition: all 0.1s ease;
 }
+
+/* Routing Priority Reminder Styles */
+.routing-priority-reminder {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(249, 115, 22, 0.1) 100%
+  );
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.routing-priority-reminder .warning-icon {
+  color: rgba(245, 158, 11, 0.9);
+  margin-top: 0.125rem;
+  font-size: 1.1rem;
+}
+
+.routing-priority-reminder .content {
+  flex: 1;
+}
+
+.routing-priority-reminder .content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.routing-priority-reminder .content span {
+  color: var(--text-secondary);
+  margin-left: 0.5rem;
+}
+
+[data-theme="dark"] .routing-priority-reminder {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.15) 0%,
+    rgba(249, 115, 22, 0.15) 100%
+  );
+  border-color: rgba(245, 158, 11, 0.4);
+}
