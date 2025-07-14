@@ -16,6 +16,7 @@ export class OutputManager {
   constructor(serviceConfigGenerator) {
     this.serviceConfigGenerator = serviceConfigGenerator;
     this.templateCache = null;
+    this.currentOutput = ""; // Store the current generated output
 
     this.elements = {
       copyButton: document.getElementById("copyButton"),
@@ -79,6 +80,7 @@ export class OutputManager {
    */
   async handleServicesChanged(services) {
     if (services.length === 0) {
+      this.currentOutput = "";
       this.updateOutput("");
       this.setButtonsState(false);
     } else {
@@ -86,6 +88,7 @@ export class OutputManager {
 
       try {
         const output = await this.generateOutput(services);
+        this.currentOutput = output;
         this.updateOutput(output);
         this.setButtonsState(true);
       } catch (error) {
@@ -139,12 +142,11 @@ export class OutputManager {
     }
 
     if (output.trim()) {
-      outputDisplay.innerHTML = `
-        <pre><code class="language-javascript">${this.escapeHtml(
-          output
-        )}</code></pre>
-      `;
+      // Hide the output display when there's generated content
+      outputDisplay.style.display = "none";
     } else {
+      // Show the no-output message when there's no content
+      outputDisplay.style.display = "block";
       outputDisplay.innerHTML = `
         <div class="no-output">
           <i class="fas fa-code"></i>
@@ -194,17 +196,11 @@ export class OutputManager {
    */
   async copyToClipboard() {
     try {
-      const outputDisplay = this.elements.outputContainer.querySelector(
-        ".output-display pre code"
-      );
-
-      if (!outputDisplay) {
+      if (!this.currentOutput || !this.currentOutput.trim()) {
         throw new Error("No output to copy");
       }
 
-      const textToCopy = outputDisplay.textContent;
-      await navigator.clipboard.writeText(textToCopy);
-
+      await navigator.clipboard.writeText(this.currentOutput);
       this.showCopySuccess();
     } catch (error) {
       console.error("Copy failed:", error);
@@ -246,16 +242,11 @@ export class OutputManager {
    */
   async downloadFile() {
     try {
-      const outputDisplay = this.elements.outputContainer.querySelector(
-        ".output-display pre code"
-      );
-
-      if (!outputDisplay) {
+      if (!this.currentOutput || !this.currentOutput.trim()) {
         throw new Error("No output to download");
       }
 
-      const content = outputDisplay.textContent;
-      const blob = new Blob([content], { type: "text/javascript" });
+      const blob = new Blob([this.currentOutput], { type: "text/javascript" });
       const url = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
