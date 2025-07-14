@@ -1,5 +1,5 @@
 /**
- * META.js Template - Configuration Generator for Clash Meta
+ * META.js Template
  * Modernized and well-documented template for generating META.js configurations
  * Source: https://github.com/xixu-me/META
  */

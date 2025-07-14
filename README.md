@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-META.js Customizer is a modern, intuitive web application that allows users to easily create custom META.js configurations for [xixu-me/META](https://github.com/xixu-me/META). It provides a beautiful visual interface to select and configure service rulesets from the [xixu-me/RFM](https://github.com/xixu-me/RFM) repository.
+META.js Customizer is a modern, intuitive web app that allows users to easily create custom META.js configurations for [xixu-me/META](https://github.com/xixu-me/META). It provides a beautiful visual interface to select and configure service rulesets from the [xixu-me/RFM](https://github.com/xixu-me/RFM) repository.
 
 ### ✨ Key Features
 
@@ -64,7 +64,7 @@ Visit **[metajs.xi-xu.me](https://metajs.xi-xu.me)** to use the customizer direc
 
 ### Service Configuration Logic
 
-Service icons are sourced from [xixu-me/favicons](https://github.com/xixu-me/favicons). The application uses intelligent heuristics to generate optimal configurations:
+Service icons are sourced from [xixu-me/favicons](https://github.com/xixu-me/favicons). Auto-generated configurations may require manual adjustments based on availability:
 
 #### Configuration Rules
 
@@ -77,9 +77,6 @@ Service icons are sourced from [xixu-me/favicons](https://github.com/xixu-me/fav
 - **🔧 Name Mismatch**: Adds `sld` when name doesn't match SLD
   - *Example*: `xai` → `{ name: "xAI", sld: "x", tld: "ai" }`
 
-- **🌐 Google Services**: Special handling for Google ecosystem
-  - *Example*: `google-drive` → `{ name: "google-drive", tld: "google", alias: "google-drive" }`
-
 ### Theme Options
 
 Click the theme toggle button to cycle through:
@@ -88,26 +85,9 @@ Click the theme toggle button to cycle through:
 - ☀️ **Light**: Force light mode  
 - 🌙 **Dark**: Force dark mode
 
-The application automatically detects system theme changes and applies them when in auto mode.
+The app automatically detects system theme changes and applies them when in auto mode.
 
 ## 🏗️ Architecture
-
-### Project Structure
-
-```text
-META.js-Customizer/
-├── src/
-│   ├── scripts/
-│   │   └── main.js           # Main application logic
-│   ├── styles/
-│   │   └── main.css          # Modern CSS with BEM methodology
-│   └── templates/
-│       └── meta-template.js  # META.js configuration template
-├── index.html                # Main HTML file
-├── CNAME                     # GitHub Pages domain
-├── LICENSE                   # GPL-3.0 License
-└── README.md                 # This file
-```
 
 ### Key Components
 
@@ -138,7 +118,7 @@ META.js-Customizer/
 
 #### 🎯 **MetaJSCustomizer**
 
-- Main application controller
+- Main app controller
 - Error handling and user feedback
 - Component orchestration and lifecycle management
 
@@ -184,33 +164,6 @@ META.js-Customizer/
 - **Lazy loading** of non-critical resources
 - **Optimized animations** with `transform` and `opacity`
 
-## 🛠️ Development
-
-### Code Standards
-
-- **Modern JavaScript (ES2020+)** with proper error handling
-- **BEM methodology** for CSS class naming
-- **JSDoc comments** for comprehensive documentation  
-- **Consistent formatting** with Prettier-style guidelines
-- **Semantic HTML** with proper accessibility attributes
-
-### Browser Support
-
-- **Chrome** 88+ ✅
-- **Firefox** 85+ ✅  
-- **Safari** 14+ ✅
-- **Edge** 88+ ✅
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-Please ensure your code follows the existing style and includes appropriate tests.
-
 ## 📄 License
 
 This project is licensed under the **GNU General Public License v3.0** - see the [LICENSE](LICENSE) file for details.
@@ -220,15 +173,3 @@ This project is licensed under the **GNU General Public License v3.0** - see the
 - **[xixu-me/META](https://github.com/xixu-me/META)** - The main META.js repository
 - **[xixu-me/RFM](https://github.com/xixu-me/RFM)** - Rulesets
 - **[xixu-me/favicons](https://github.com/xixu-me/favicons)** - Service icons repository
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/xixu-me/META.js-Customizer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/xixu-me/META.js-Customizer/discussions)
-- **Website**: [metajs.xi-xu.me](https://metajs.xi-xu.me)
-
----
-
-**Built with ❤️ by [xixu-me](https://github.com/xixu-me)**
-
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.

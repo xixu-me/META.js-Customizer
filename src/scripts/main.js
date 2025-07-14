@@ -1,7 +1,7 @@
 /**
- * META.js Customizer - Main Application Script
+ * META.js Customizer - Main App Script
  *
- * A modern, accessible web application for generating custom META.js configurations
+ * A modern, accessible web app for generating custom META.js configurations
  * using service rulesets from the xixu-me/RFM repository.
  *
  * @author xixu-me
