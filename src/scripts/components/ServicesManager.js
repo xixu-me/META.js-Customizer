@@ -151,7 +151,6 @@ export class ServicesManager {
       `;
     } else {
       this.elements.searchResults.innerHTML = services
-        .slice(0, 10) // Limit to 10 results for performance
         .map(
           (service) => `
           <div class="search-result-item" data-service-name="${service.name}">
