@@ -15,6 +15,7 @@
  * @license GPL-3.0
  */
 
+import { DomainPreviewManager } from "./components/DomainPreviewManager.js";
 import { OutputManager } from "./components/OutputManager.js";
 import { ServiceConfigGenerator } from "./components/ServiceConfigGenerator.js";
 import { ServicesManager } from "./components/ServicesManager.js";
@@ -63,6 +64,9 @@ export class MetaJSCustomizer {
 
     // Initialize service config generator (no dependencies)
     this.components.serviceConfigGenerator = new ServiceConfigGenerator();
+
+    // Initialize domain preview manager (no dependencies)
+    this.components.domainPreviewManager = new DomainPreviewManager();
 
     // Initialize services manager (depends on API)
     this.components.servicesManager = new ServicesManager();

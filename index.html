@@ -223,6 +223,50 @@
         </section>
       </main>
 
+      <!-- Domain Preview Modal -->
+      <div id="domain-preview-modal" class="modal-overlay" aria-hidden="true">
+        <div
+          class="modal-content"
+          role="dialog"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <div class="modal-header">
+            <h3 id="modal-title">Domain Preview</h3>
+            <button class="modal-close" aria-label="Close domain preview">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="service-info-header">
+              <div class="service-icon">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div class="service-details">
+                <h4 id="modal-service-name">Service Name</h4>
+                <p id="modal-description">Domain rules for this service</p>
+              </div>
+            </div>
+            <div class="domains-container">
+              <div class="loading-spinner" id="modal-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading domain list...</p>
+              </div>
+              <div
+                class="domains-list"
+                id="domains-list"
+                style="display: none"
+              ></div>
+              <div class="modal-error" id="modal-error" style="display: none">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4>Failed to Load Domains</h4>
+                <p id="error-message">Unable to fetch domain information.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Information Section -->
       <aside class="info-banner card" aria-labelledby="info-heading">
         <div class="card-header">

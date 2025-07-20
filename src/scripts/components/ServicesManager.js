@@ -154,8 +154,16 @@ export class ServicesManager {
         .map(
           (service) => `
           <div class="search-result-item" data-service-name="${service.name}">
-            <i class="fas fa-plus-circle"></i>
-            <span>${service.name}</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+              <i class="fas fa-plus-circle"></i>
+              <span>${service.name}</span>
+            </div>
+            <button class="preview-btn" 
+                    data-service-name="${service.name}"
+                    title="Preview domains for ${service.name}">
+              <i class="fas fa-eye"></i>
+              Preview
+            </button>
           </div>
         `
         )
@@ -177,6 +185,24 @@ export class ServicesManager {
    * @param {Event} event - Click event
    */
   handleSearchResultClick(event) {
+    // Handle preview button clicks
+    if (
+      event.target.classList.contains("preview-btn") ||
+      event.target.closest(".preview-btn")
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const previewBtn = event.target.classList.contains("preview-btn")
+        ? event.target
+        : event.target.closest(".preview-btn");
+      const serviceName = previewBtn.dataset.serviceName;
+      if (serviceName) {
+        this.requestDomainPreview(serviceName);
+      }
+      return;
+    }
+
     const resultItem = event.target.closest(".search-result-item");
     if (!resultItem || resultItem.classList.contains("search-no-results"))
       return;
@@ -188,10 +214,29 @@ export class ServicesManager {
   }
 
   /**
-   * Handle clicks on selected services (removal)
+   * Handle clicks on selected services (removal and preview)
    * @param {Event} event - Click event
    */
   handleSelectedServiceClick(event) {
+    // Handle preview button clicks
+    if (
+      event.target.classList.contains("preview-btn") ||
+      event.target.closest(".preview-btn")
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const previewBtn = event.target.classList.contains("preview-btn")
+        ? event.target
+        : event.target.closest(".preview-btn");
+      const serviceName = previewBtn.dataset.serviceName;
+      if (serviceName) {
+        this.requestDomainPreview(serviceName);
+      }
+      return;
+    }
+
+    // Handle remove button clicks
     if (event.target.classList.contains("service-remove-btn")) {
       const serviceName = event.target.dataset.serviceName;
       if (serviceName) {
@@ -239,6 +284,18 @@ export class ServicesManager {
   }
 
   /**
+   * Request domain preview for a service
+   * @param {string} serviceName - Service name to preview
+   */
+  requestDomainPreview(serviceName) {
+    // Dispatch custom event for domain preview
+    const event = new CustomEvent("domainPreviewRequest", {
+      detail: { serviceName },
+    });
+    document.dispatchEvent(event);
+  }
+
+  /**
    * Update UI components
    */
   updateUI() {
@@ -281,6 +338,12 @@ export class ServicesManager {
           </div>
           <div class="service-info">
             <span class="service-name">${serviceName}</span>
+            <button class="preview-btn" 
+                    data-service-name="${serviceName}"
+                    title="Preview domains for ${serviceName}">
+              <i class="fas fa-eye"></i>
+              Preview
+            </button>
           </div>
           <button class="service-remove-btn" 
                   data-service-name="${serviceName}"
