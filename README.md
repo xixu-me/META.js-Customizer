@@ -7,6 +7,7 @@ META.js Customizer is a modern, intuitive web app that allows users to easily cr
 ### ✨ Key Features
 
 - 🔍 **Smart Service Search**: Instantly search and filter through all available services
+- 👁️ **Domain Preview**: Click preview buttons to view domain lists and rules for each service
 - 🎨 **Modern Glass UI**: Beautiful, responsive design with glassmorphism effects
 - 🌙 **Intelligent Theming**: Auto-detects system theme with manual override options
 - 📱 **Mobile Responsive**: Seamlessly adapts to all device sizes
@@ -57,10 +58,41 @@ Visit **[metajs.xi-xu.me](https://metajs.xi-xu.me)** to use the customizer direc
 ### Basic Workflow
 
 1. **🔍 Search for Services**: Use the search bar to find services you want to include
-2. **✅ Select Services**: Click on search results to add them to your configuration
-3. **📝 Review Selection**: Check your selected services in the main panel
-4. **⚙️ Generate Configuration**: Your META.js is automatically generated in real-time
-5. **📋 Copy or Download**: Use the action buttons to copy or download your configuration
+2. **👁️ Preview Domains**: Click "Preview" buttons to see domain rules for each service
+3. **✅ Select Services**: Click on search results to add them to your configuration
+4. **📝 Review Selection**: Check your selected services in the main panel
+5. **⚙️ Generate Configuration**: Your META.js is automatically generated in real-time
+6. **📋 Copy or Download**: Use the action buttons to copy or download your configuration
+
+### 👁️ Domain Preview Feature
+
+The Domain Preview functionality allows you to inspect the domain rules for any service before adding it to your configuration:
+
+#### **Preview Access**
+
+- **Search Results**: Click the "Preview" button next to any service in search results
+- **Selected Services**: Click the "Preview" button next to selected services to review their domains
+
+#### **Domain Categories**
+
+The preview modal organizes domains into three categories:
+
+- **📍 Exact Domains**: Specific domain matches (e.g., `github.com`, `api.github.com`)
+- **🌐 Domain Suffixes**: Wildcard domain patterns that match subdomains (e.g., `+.google.com`)
+- **🔑 Pattern Rules**: Keyword-based and advanced pattern matching rules
+
+#### **Interactive Features**
+
+- **Collapsible Categories**: Click category headers to expand/collapse domain lists
+- **Responsive Design**: Optimized for both desktop and mobile viewing
+- **Real-time Loading**: Fetches latest domain data directly from the RFM repository
+- **Error Handling**: Clear feedback if domain data cannot be loaded
+
+#### **Technical Details**
+
+- **Data Source**: Fetches YAML files directly from [xixu-me/RFM](https://github.com/xixu-me/RFM/tree/universal/yaml)
+- **Smart Parsing**: Automatically categorizes domains based on prefixes and patterns
+- **Glassmorphism UI**: Beautiful modal interface with backdrop blur effects
 
 ### Service Configuration Logic
 
@@ -106,6 +138,15 @@ The META.js Customizer follows a modern, modular architecture designed for maint
 - Implements debounced search for optimal performance
 - Manages service selection state with event-driven updates
 - Provides real-time filtering and search capabilities
+- Integrates domain preview functionality with preview buttons
+
+#### **👁️ DomainPreviewManager**
+
+- Fetches and parses YAML domain files from RFM repository
+- Intelligent domain categorization (exact, suffixes, patterns)
+- Modal-based preview interface with glassmorphism design
+- Real-time domain data loading with error handling
+- Responsive design for mobile and desktop viewing
 
 #### **⚙️ ServiceConfigGenerator**
 
