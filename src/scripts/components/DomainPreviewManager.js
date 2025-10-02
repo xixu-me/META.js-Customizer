@@ -292,7 +292,7 @@ export class DomainPreviewManager {
       domainsHTML += this.createDomainCategory(
         "Domain Suffixes",
         "fas fa-sitemap",
-        domainData.domainSuffixes.map((domain) => `+.${domain}`),
+        domainData.domainSuffixes,
         "Matches domain and all subdomains"
       );
     }
