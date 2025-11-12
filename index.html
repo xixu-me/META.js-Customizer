@@ -4,40 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Mobile & Theme -->
+    <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="META.js Customizer" />
+
     <!-- Basic Meta Tags -->
-    <title>META.js Customizer - Create Custom META.js</title>
+    <title>META.js Customizer - Create Custom META.js Configuration | xixu-me</title>
     <meta
       name="description"
-      content="Create your custom META.js with service rulesets from xixu-me/RFM. Easy-to-use web interface for generating META.js."
+      content="Free online META.js customizer tool. Build custom META.js configurations with service rulesets from xixu-me/RFM. Drag-and-drop interface, real-time generation, GitHub integration. Create your META.js in seconds."
     />
     <meta
       name="keywords"
-      content="META.js, customizer, web development, service rulesets, RFM, xixu-me, favicons, JavaScript"
+      content="META.js, META.js customizer, META.js generator, META.js configuration, service rulesets, RFM, xixu-me, web development, network routing, proxy configuration, rule generator, JavaScript, GitHub, open source, drag and drop, configuration tool, meta js builder"
     />
     <meta name="author" content="xixu-me" />
+    <meta name="generator" content="META.js Customizer" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://metajs.xi-xu.me" />
     <meta
       property="og:title"
-      content="META.js Customizer - Create Custom META.js"
+      content="META.js Customizer - Create Custom META.js Configuration | xixu-me"
     />
     <meta
       property="og:description"
-      content="Create your custom META.js with service rulesets from xixu-me/RFM. Easy-to-use web interface for generating META.js."
+      content="Free online META.js customizer tool. Build custom META.js configurations with service rulesets from xixu-me/RFM. Drag-and-drop interface, real-time generation, GitHub integration."
     />
     <meta property="og:site_name" content="META.js Customizer" />
+    <!-- TODO: Add og:image with a screenshot/preview of the application -->
+    <!-- <meta property="og:image" content="https://metajs.xi-xu.me/assets/preview.png" /> -->
+    <meta property="og:image:alt" content="META.js Customizer interface screenshot" />
 
     <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://metajs.xi-xu.me" />
     <meta
       name="twitter:title"
-      content="META.js Customizer - Create Custom META.js"
+      content="META.js Customizer - Create Custom META.js Configuration | xixu-me"
     />
     <meta
       name="twitter:description"
-      content="Create your custom META.js with service rulesets from xixu-me/RFM. Easy-to-use web interface for generating META.js."
+      content="Free online META.js customizer tool. Build custom META.js configurations with service rulesets from xixu-me/RFM. Drag-and-drop interface, real-time generation, GitHub integration."
     />
     <meta name="twitter:creator" content="@xixu_me" />
     <meta name="twitter:site" content="@xixu_me" />
@@ -45,10 +59,16 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://metajs.xi-xu.me" />
 
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="src/styles/main.css" as="style" />
+    <link rel="preload" href="src/scripts/app.js" as="script" />
+    <link rel="preload" href="src/templates/meta-template.js" as="script" />
+
     <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link rel="preconnect" href="https://api.github.com" />
     <link rel="preconnect" href="https://raw.githubusercontent.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="src/styles/main.css" />
@@ -59,6 +79,44 @@
 
     <!-- SortableJS for drag-and-drop functionality -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "META.js Customizer",
+      "url": "https://metajs.xi-xu.me",
+      "description": "Create your custom META.js with service rulesets from xixu-me/RFM. Easy-to-use web interface for generating META.js configurations.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "xixu-me",
+        "url": "https://github.com/xixu-me"
+      },
+      "sourceOrganization": {
+        "@type": "Organization",
+        "name": "xixu-me",
+        "url": "https://github.com/xixu-me"
+      },
+      "inLanguage": "en",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "featureList": [
+        "Service ruleset selection",
+        "Drag-and-drop ordering",
+        "Real-time META.js generation",
+        "GitHub integration",
+        "Dark/Light theme support",
+        "Domain preview"
+      ]
+    }
+    </script>
   </head>
   <body>
     <!-- Theme Toggle -->
